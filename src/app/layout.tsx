@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
+import { cn } from "@/lib/utils";
+import { ToastContainer, Bounce } from "react-toastify";
+import { Inter } from "next/font/google";
+const inter = Inter({ subsets: ["latin"] });
+import Navbar from "@/components/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import QueryProvider from "@/context/providers";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,17 +16,42 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children,authModal
 }: Readonly<{
   children: React.ReactNode;
+  authModal: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={cn(
+        "bg-white text-slate-900 antialiased light",
+        inter.className
+      )}
+    >
+      <QueryProvider>
+   
+      <body className="min-h-screen pt-12 bg-slate-100 antialiased">
+        <div className="container max-w-7xl mx-auto h-full pt-12"> 
+          <Navbar />
+         {authModal} 
+
+          {children}
+        </div>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
+      </body></QueryProvider>
     </html>
   );
 }
