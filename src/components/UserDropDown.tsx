@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+
+import React, { FC } from 'react'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -6,65 +7,62 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "./ui/dropdown-menu";
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { getAuthSession } from "@/lib/auth";
-import Link from "next/link";
-// If you use signOut, make sure it's imported
-// import { signOut } from "next-auth/react";
+} from './ui/dropdown-menu'
+import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
+import { getAuthSession } from '@/lib/auth'
 
+import Link from 'next/link'
 
-const UserDropDown: FC= async () => {
-  const session = await getAuthSession();
-
-  // If there's no session, it's often better to render nothing or a login button.
-  if (!session?.user) {
-    return (
-      <Link href="/sign-in">
-        <button>Sign In</button>
-      </Link>
-    );
-  }
-
+interface UserDropDownProps {
+    className?: string
+    children: React.ReactNode
+    name?: string
+    image?: string
+    onClick?: () => void
+    disabled?: boolean
+}
+import { signOut } from 'next-auth/react'
+const UserDropDown:FC<UserDropDownProps> =async () => {
+  
+    const session = await getAuthSession();
   return (
     <div className="relative z-10">
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
             <AvatarImage
-              src={session.user.image ?? undefined}
-              alt={session.user.name ?? "User avatar"}
+              src={
+                typeof session?.user?.image === "string" && session.user.image
+                  ? session.user.image
+                  : "/default-avatar.png"
+              }
+              alt={session?.user?.name ?? "User avatar"}
             />
             <AvatarFallback>
-              CN
+              {" "}
+             CN
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>
-            <p className="text-md font-medium">{session.user.name}</p>
-            {session.user.email && (
-              <p className="text-xs text-zinc-600">{session.user.email}</p>
-            )}
+            <p className="text-md ">{session?.user?.email}</p>
+            <p className="text-xs text-zinc-600">{session?.user?.name}</p>
           </DropdownMenuLabel>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <Link href="/feed">Feed</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/r/create">Create Community</Link>
+          <DropdownMenuItem>
+            <Link href="/r/create">Comunity</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/settings">Settings</Link>
+          <DropdownMenuItem>
+            <Link href="/setting">Setting</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onSelect={(event) => {
-              event.preventDefault();
-              // signOut({ callbackUrl: '/' });
-            }}
-            className="cursor-pointer"
+          //  onClick={() => signOut({ callbackUrl: '/' })}
           >
             Sign Out
           </DropdownMenuItem>
@@ -72,6 +70,6 @@ const UserDropDown: FC= async () => {
       </DropdownMenu>
     </div>
   );
-};
+}
 
-export default UserDropDown;
+export default UserDropDown
