@@ -1,57 +1,33 @@
 "use client";
 
-
-import {  User, Vote } from "@prisma/client";
+// Import the same 'ExtendedPost' type used by the parent component
+import { ExtendedPost } from "@/types/db";
+import { Vote } from "@prisma/client";
 import { MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { FC, useRef } from "react";
 import EditorOutput from "./EditorOutput";
 import { formatTimeToNow } from "@/lib/fromateTimeDate";
 
-
 type PartialVote = Pick<Vote, "type">;
 
+// --- THE FIX IS HERE ---
+// Instead of redefining the post shape, we reuse the ExtendedPost type.
+// This ensures that Post and PostFeed are always in sync.
+// We also remove redundant props like 'commentAmt' because they can be derived from the 'post' object itself.
 interface PostProps {
-  post: {
-    author: User;
-    votes: Vote[];
-    id: string;
-    title: string;
-content:{
-  blocks: {
-    type: string;
-    data: {
-      text?: string;
-      level?: number;
-      items?: string[];
-      style?: string;
-    };
-    id: string;
-    version: string;
-  }[];
-  version: string;
-  time: number;
- 
-};
-    createdAt: Date;
-    updatedAt: Date;
-    
-  };
-  votesAmt: number;
+  post: ExtendedPost;
   subredditName: string;
-  createdAt: Date;
   currentVote?: PartialVote;
-  commentAmt: number;
+  votesAmt: number;
+
 }
 
-const Post: FC<PostProps> = ({
-  post,
-  
+const Post: FC<PostProps> = ({ post, subredditName }) => {
+  const pRef = useRef<HTMLDivElement>(null);
 
-  subredditName,
-  commentAmt,
-}) => {
-  const pRef = useRef<HTMLParagraphElement>(null);
+  // We can derive the comment amount directly from the post object.
+  const commentAmt = post.comments.length;
 
   return (
     <div className="rounded-md bg-white shadow">
@@ -88,9 +64,9 @@ const Post: FC<PostProps> = ({
             className="relative text-sm max-h-40 w-full overflow-clip"
             ref={pRef}
           >
+            {/* The EditorOutput component must be able to handle 'content' being null or an object */}
             <EditorOutput content={post.content} />
             {pRef.current?.clientHeight === 160 ? (
-          
               <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>
             ) : null}
           </div>
@@ -108,4 +84,5 @@ const Post: FC<PostProps> = ({
     </div>
   );
 };
+
 export default Post;

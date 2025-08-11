@@ -4,36 +4,10 @@ import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 
-
-interface post{
-    id: string;
-       title: string;
-   content:{
-     blocks: {
-       type: string;
-       data: {
-         text?: string;
-         level?: number;
-         items?: string[];
-         style?: string;
-       };
-       id: string;
-       version: string;
-     }[];
-     version: string;
-     time: number;
-    
-   };
-       createdAt: Date;
-       updatedAt: Date;
-       
-     };
-    
-    
+// The 'post' interface was unused, so it can be safely removed.
 
 const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
-
-  const { slug } = await params;
+  const { slug } =await params;
   const session = await getAuthSession();
 
   const subreddit = await db.subreddit.findFirst({
@@ -49,13 +23,14 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
         orderBy: {
           createdAt: "desc",
         },
-      
         take: 3,
       },
     },
   });
 
-  if (!subreddit) return notFound();
+  if (!subreddit) {
+    return notFound();
+  }
 
   return (
     <>
@@ -63,6 +38,7 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
         r/{subreddit.name}
       </h1>
       <MiniCreatePost session={session} />
+
       <PostFeed initialPosts={subreddit.posts} subredditName={subreddit.name} />
     </>
   );

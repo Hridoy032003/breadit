@@ -36,9 +36,7 @@ export const getEditorTools = async (startUpload: (files: File[]) => Promise<unk
             }
             return {
               success: 1,
-              file: {
-                url: res[0].url,
-              },
+             
             };
           },
         },

@@ -13,18 +13,9 @@ import { getAuthSession } from '@/lib/auth'
 
 import Link from 'next/link'
 
-interface UserDropDownProps {
-    className?: string
-    children: React.ReactNode
-    name?: string
-    image?: string
-    onClick?: () => void
-    disabled?: boolean
-}
-import { signOut } from 'next-auth/react'
-const UserDropDown:FC<UserDropDownProps> =async () => {
-  
-    const session = await getAuthSession();
+
+const UserDropDown: FC= async ({  }) => {
+  const session = await getAuthSession();
   return (
     <div className="relative z-10">
       <DropdownMenu>
@@ -38,10 +29,7 @@ const UserDropDown:FC<UserDropDownProps> =async () => {
               }
               alt={session?.user?.name ?? "User avatar"}
             />
-            <AvatarFallback>
-              {" "}
-             CN
-            </AvatarFallback>
+            <AvatarFallback> CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -70,6 +58,6 @@ const UserDropDown:FC<UserDropDownProps> =async () => {
       </DropdownMenu>
     </div>
   );
-}
+};
 
 export default UserDropDown
