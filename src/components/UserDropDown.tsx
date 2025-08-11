@@ -13,6 +13,8 @@ import { getAuthSession } from '@/lib/auth'
 
 import Link from 'next/link'
 
+import Logout from './Logout'
+
 
 const UserDropDown: FC= async ({  }) => {
   const session = await getAuthSession();
@@ -50,9 +52,9 @@ const UserDropDown: FC= async ({  }) => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-          //  onClick={() => signOut({ callbackUrl: '/' })}
+          
           >
-            Sign Out
+          <Logout/>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

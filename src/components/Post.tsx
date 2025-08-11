@@ -17,25 +17,18 @@ import { formatTimeToNow } from "@/lib/fromateTimeDate";
 interface PostProps {
   post: ExtendedPost;
   subredditName: string;
-
-
-
 }
 
 const Post: FC<PostProps> = ({ post, subredditName }) => {
   const pRef = useRef<HTMLDivElement>(null);
 
-  // We can derive the comment amount directly from the post object.
+
   const commentAmt = post.comments.length;
 
   return (
     <div className="rounded-md bg-white shadow">
       <div className="px-6 py-4 flex justify-between">
-        {/* <PostVoteClient
-          postId={post.id}
-          initialVotesAmt={_votesAmt}
-          initialVote={_currentVote?.type}
-        /> */}
+    
 
         <div className="w-0 flex-1">
           <div className="max-h-40 mt-1 text-xs text-gray-500">
@@ -50,7 +43,7 @@ const Post: FC<PostProps> = ({ post, subredditName }) => {
                 <span className="px-1">•</span>
               </>
             ) : null}
-            <span>Posted by u/{post.author.username}</span>{" "}
+            <span>Posted by {post.author.name}</span>{" "}
             {formatTimeToNow(new Date(post.createdAt))}
           </div>
           <a href={`/r/${subredditName}/post/${post.id}`}>
@@ -63,7 +56,7 @@ const Post: FC<PostProps> = ({ post, subredditName }) => {
             className="relative text-sm max-h-40 w-full overflow-clip"
             ref={pRef}
           >
-            {/* The EditorOutput component must be able to handle 'content' being null or an object */}
+          
             <EditorOutput content={post.content} />
             {pRef.current?.clientHeight === 160 ? (
               <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>

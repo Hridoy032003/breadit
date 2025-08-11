@@ -3,16 +3,9 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 
-// We no longer need this interface
-// interface pageProps {
-//   params: {
-//     slug: string
-//   }
-// }
 
-// 👇 CHANGE #1: Define the props inline, destructure 'params', and type it as a Promise.
 const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
-  // 👇 CHANGE #2: Correctly await the params Promise to get the slug.
+
   const { slug } = await params;
 
   const subreddit = await db.subreddit.findFirst({
@@ -30,7 +23,7 @@ const page = async ({ params }: { params: Promise<{ slug: string }> }) => {
           <h3 className="ml-2 mt-2 text-base font-semibold leading-6 text-gray-900">
             Create Post
           </h3>
-          {/* 👇 CHANGE #3: Use the resolved 'slug' variable, not 'params.slug'. */}
+        
           <p className="ml-2 mt-1 truncate text-sm text-gray-500">
             in r/{slug}
           </p>

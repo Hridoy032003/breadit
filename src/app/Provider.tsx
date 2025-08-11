@@ -19,8 +19,12 @@ export default function Providers({
   session,
 }: {
   children: React.ReactNode;
-  session: session;
+  session: session | null;
 }) {
-  return <QueryProvider><SessionProvider session={session}>{children}</SessionProvider>;</QueryProvider>
+  return (
+    <QueryProvider>
+      <SessionProvider session={session}>{children}</SessionProvider>;
+    </QueryProvider>
+  );
   
 }
