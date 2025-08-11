@@ -17,9 +17,6 @@ import { formatTimeToNow } from "@/lib/fromateTimeDate";
 interface PostProps {
   post: ExtendedPost;
   subredditName: string;
-
-
-
 }
 
 const Post: FC<PostProps> = ({ post, subredditName }) => {
