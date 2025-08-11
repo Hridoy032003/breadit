@@ -6,7 +6,7 @@
 
 
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 
@@ -17,8 +17,8 @@ import { toast } from "react-toastify";
 
 interface CreateCommentProps {
   postId: string;
+
   replyToId?: string;
- 
 }
 
 const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
@@ -27,7 +27,11 @@ const CreateComment: FC<CreateCommentProps> = ({ postId, replyToId }) => {
  
 
   const { mutate: comment } = useMutation({
-    mutationFn: async ({ postId, text, replyToId }: CreateCommentProps) => {
+    mutationFn: async ({ postId, text, replyToId }: {
+    postId: string;
+    text: string;
+    replyToId?: string;
+    }) => {
       const payload = { postId, text, replyToId };
 
       const { data } = await axios.patch(

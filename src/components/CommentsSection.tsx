@@ -6,20 +6,21 @@ import PostComment from './Postcomment';
 import { getAuthSession } from '@/lib/auth';
 
 const CommentsSection = async( {
-  postId
+  postId,
+  
 }:{postId:string}) => {
   const session = await getAuthSession();
 
     const comments = await db.comment.findMany({
     where: {
       postId: postId,
-      replyToId: null, // only fetch top-level comments
+      replyToId: null, 
     },
     include: {
       author: true,
       votes: true,
       replies: {
-        // first level replies
+
         include: {
           author: true,
           votes: true,
@@ -63,9 +64,9 @@ const CommentsSection = async( {
                     />
                   </div>
 
-                  {/* Render replies */}
+            
                   {topLevelComment.replies
-                    .sort((a, b) => b.votes.length - a.votes.length) // Sort replies by most liked
+                    .sort((a, b) => b.votes.length - a.votes.length)
                     .map((reply) => {
                       const replyVotesAmt = reply.votes.reduce((acc, vote) => {
                         if (vote.type === "UP") return acc + 1;
@@ -82,12 +83,12 @@ const CommentsSection = async( {
                           key={reply.id}
                           className="ml-2 py-2 pl-4 border-l-2 border-zinc-200"
                         >
-                          {/* <PostComment
+                          <PostComment
                             comment={reply}
                             currentVote={replyVote}
                             votesAmt={replyVotesAmt}
                             postId={postId}
-                          /> */}
+                          />
                         </div>
                       );
                     })}

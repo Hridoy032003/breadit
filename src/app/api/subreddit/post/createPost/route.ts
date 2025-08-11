@@ -15,16 +15,30 @@ export async function POST(req: Request) {
         
       return new Response('Unauthorized', { status: 401 })
     }
-
-    const subscription = await db.subscription.findFirst({
+const subreddit = await db.subreddit.findFirst({
       where: {
-        subredditId,
-        userId: session.user.id,
+        id: subredditId,
       },
-    })
+    });
 
-    if (!subscription) {
-      return new Response('Subscribe to post', { status: 403 })
+    if (!subreddit) {
+      return new Response('Subreddit not found', { status: 404 });
+    }
+
+   const isOwner = subreddit.creatorId === session.user.id;
+
+
+    if (!isOwner) {
+      const subscription = await db.subscription.findFirst({
+        where: {
+          subredditId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!subscription) {
+        return new Response('Subscribe to post', { status: 403 });
+      }
     }
 
     await db.post.create({

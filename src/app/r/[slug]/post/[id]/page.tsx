@@ -3,20 +3,12 @@ import EditorOutput from "@/components/EditorOutput";
  // Assuming this component exists
 import { db } from "@/lib/db";
 import { formatTimeToNow } from "@/lib/fromateTimeDate";
-import { Post, User, Vote } from "@prisma/client";
+
 import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-// Defines the shape of the props this page will receive from Next.js
-interface SubRedditPostPageProps {
-  params: {
-    
-    postId: string;
-  };
-}
 
-// These exports ensure the page is always rendered dynamically with the latest data
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
@@ -61,7 +53,7 @@ const SubRedditPostPage = async ({
 
         <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
           <p className="max-h-40 mt-1 truncate text-xs text-gray-500">
-            Posted by u/{post.author.username}{" "}
+            Posted by {post.author.name}{" "}
             {formatTimeToNow(new Date(post.createdAt))}
           </p>
           <h1 className="text-xl font-semibold py-2 leading-6 text-gray-900">

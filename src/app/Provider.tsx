@@ -19,7 +19,7 @@ export default function Providers({
   session,
 }: {
   children: React.ReactNode;
-  session: session;
+  session: session | null;
 }) {
   return (
     <QueryProvider>

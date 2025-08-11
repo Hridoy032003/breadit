@@ -10,11 +10,12 @@ import { FC, useRef, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import { UserAvatar } from "./UserAvatar";
+
 import { formatTimeToNow } from "@/lib/fromateTimeDate";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 type ExtendedComment = Comment & {
   votes: CommentVote[];
@@ -35,8 +36,6 @@ interface CreateCommentProps {
 
 const PostComment: FC<PostCommentProps> = ({
   comment,
-  votesAmt,
-  currentVote,
   postId,
 }) => {
   const { data: session } = useSession();
@@ -66,21 +65,19 @@ const PostComment: FC<PostCommentProps> = ({
       setIsReplying(false);
     },
   });
-
+console.log(comment)
   return (
     <div ref={commentRef} className="flex flex-col">
       <div className="flex items-center">
-        {/* <UserAvatar
-          user={{
-            name: comment.author.name || null,
-            image: comment.author.image || null,
-          }}
-          className="h-6 w-6"
-        /> */}
-        
+        <Avatar>
+          <AvatarImage src={comment?.author.image ?? "/default-avatar.png"} />
+          <AvatarFallback>{
+            comment?.author?.name}</AvatarFallback>
+        </Avatar>
+
         <div className="ml-2 flex items-center gap-x-2">
           <p className="text-sm font-medium text-gray-900">
-            u/{comment.author.username}
+            u/{comment.author.name}
           </p>
 
           <p className="max-h-40 truncate text-xs text-zinc-500">
@@ -92,11 +89,7 @@ const PostComment: FC<PostCommentProps> = ({
       <p className="text-sm text-zinc-900 mt-2">{comment.text}</p>
 
       <div className="flex gap-2 items-center">
-        {/* <CommentVotes
-          commentId={comment.id}
-          votesAmt={votesAmt}
-          currentVote={currentVote}
-        /> */}
+      
 
         <Button
           onClick={() => {
@@ -104,7 +97,6 @@ const PostComment: FC<PostCommentProps> = ({
             setIsReplying(true);
           }}
           variant="ghost"
-        
         >
           <MessageSquare className="h-4 w-4 mr-1.5" />
           Reply
@@ -131,21 +123,16 @@ const PostComment: FC<PostCommentProps> = ({
             />
 
             <div className="mt-2 flex justify-end gap-2">
-              <Button
-                tabIndex={-1}
-             
-                onClick={() => setIsReplying(false)}
-              >
+              <Button tabIndex={-1} onClick={() => setIsReplying(false)}>
                 Cancel
               </Button>
               <Button
-             
                 onClick={() => {
                   if (!input) return;
                   postComment({
                     postId,
                     text: input,
-                    replyToId: comment.replyToId ?? comment.id, // default to top-level comment
+                    replyToId: comment.replyToId ?? comment.id, 
                   });
                 }}
               >
