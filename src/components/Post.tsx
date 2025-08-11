@@ -18,7 +18,7 @@ interface PostProps {
   post: ExtendedPost;
   subredditName: string;
 
-  votesAmt: number;
+
 
 }
 
