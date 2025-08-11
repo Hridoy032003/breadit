@@ -33,6 +33,7 @@
     "date-fns": "^4.1.0",
     "editorjs-react-renderer": "^3.5.1",
     "lucide-react": "^0.536.0",
+    "nanoid": "^5.1.5",
     "next": "15.4.5",
     "next-auth": "^4.24.11",
     "react": "19.1.0",
