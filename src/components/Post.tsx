@@ -1,15 +1,14 @@
 "use client";
 
-// Import the same 'ExtendedPost' type used by the parent component
 import { ExtendedPost } from "@/types/db";
-import { Vote } from "@prisma/client";
+
 import { MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { FC, useRef } from "react";
 import EditorOutput from "./EditorOutput";
 import { formatTimeToNow } from "@/lib/fromateTimeDate";
 
-type PartialVote = Pick<Vote, "type">;
+
 
 // --- THE FIX IS HERE ---
 // Instead of redefining the post shape, we reuse the ExtendedPost type.
@@ -18,7 +17,7 @@ type PartialVote = Pick<Vote, "type">;
 interface PostProps {
   post: ExtendedPost;
   subredditName: string;
-  currentVote?: PartialVote;
+
   votesAmt: number;
 
 }
