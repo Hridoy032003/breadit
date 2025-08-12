@@ -2,37 +2,34 @@
 
 import React from "react";
 import Image from "next/image";
-// Import OutputData for the type cast after validation
+
 import { OutputData, OutputBlockData } from "@editorjs/editorjs";
 
 interface EditorOutputProps {
-  // 👇 THE FIX IS HERE 👇
-  // Use 'unknown' instead of 'any'. This is the type-safe way to represent
-  // a value whose type is not known at compile time.
+
   content: unknown;
 }
 
 const EditorOutput = ({ content }: EditorOutputProps) => {
-  // This validation logic now serves as a "type guard". It proves to TypeScript
-  // that 'content' has the shape we expect before we try to use it.
+
   const isContentValid =
     content &&
     typeof content === "object" &&
-    "blocks" in content && // Check that the 'blocks' key exists
+    "blocks" in content && 
     (content as { blocks: unknown }).blocks &&
     Array.isArray((content as { blocks: unknown }).blocks);
 
   if (!isContentValid) {
-    // If the 'unknown' content fails validation, we render nothing.
+   
     return null;
   }
 
-  // After the check, we can safely cast the content to the type we need.
+
   const validContent = content as OutputData;
 
   return (
     <div className="text-sm prose prose-stone dark:prose-invert max-w-full">
-      {/* We map over the now-validated 'validContent' */}
+     
       {validContent.blocks.map((block: OutputBlockData, index: number) => {
         switch (block.type) {
           case "header":

@@ -48,7 +48,7 @@ const UserDropDown: FC= async ({  }) => {
             <Link href="/r/create">Comunity</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/setting">Setting</Link>
+            <Link href='/dashboard/${session?.user?.id}'>Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
