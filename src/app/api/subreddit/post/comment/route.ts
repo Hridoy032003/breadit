@@ -1,5 +1,5 @@
 import { getAuthSession } from '@/lib/auth'
-import { db } from '@/lib/db'
+import { createComment } from '@/services/comments'
 
 import { z } from 'zod'
 
@@ -15,13 +15,11 @@ export async function PATCH(req: Request) {
       return new Response('Unauthorized', { status: 401 })
     }
 
-    await db.comment.create({
-      data: {
-        text,
-        postId,
-        authorId: session.user.id,
-        replyToId,
-      },
+    await createComment({
+      text,
+      postId,
+      authorId: session.user.id,
+      replyToId,
     })
 
     return new Response('OK')

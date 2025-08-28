@@ -1,6 +1,5 @@
 import { getAuthSession } from '@/lib/auth'
-import { db } from '@/lib/db'
-
+import { toggleSubscription } from '@/services/subscriptions'
 
 import { z } from 'zod'
  
@@ -12,34 +11,26 @@ export async function POST(req: Request) {
       return new Response('Unauthorized', { status: 401 })
     }
 
-    const {subredditId} = await req.json()
-   
-   
-    const subscriptionExists = await db.subscription.findFirst({
-      where: {
-        subredditId,
-        userId: session.user.id,
-      },
-    })
+    const { subredditId } = await req.json()
 
-    if (subscriptionExists) {
-      return new Response("You've already subscribed to this subreddit", {
-        status: 400,
-      })
-    }
-
-   
-    await db.subscription.create({
-      data: {
-        subredditId,
-        userId: session.user.id,
-      },
+    await toggleSubscription({
+      subredditId,
+      userId: session.user.id,
+      subscribe: true,
     })
 
     return new Response(subredditId)
   } catch (error) {
     console.log(error)
-   
+
+    if (error instanceof Error) {
+      if (error.message === 'ALREADY_SUBSCRIBED') {
+        return new Response("You've already subscribed to this subreddit", {
+          status: 400,
+        })
+      }
+    }
+
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 400 })
     }
